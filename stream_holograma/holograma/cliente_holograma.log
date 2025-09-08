@@ -1,0 +1,6 @@
+2025-08-28 13:00:09,266 INFO: Erro ao conectar: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente
+2025-08-28 13:00:09,266 ERROR: Erro ao conectar: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente
+2025-08-28 13:00:47,102 INFO: Erro ao conectar: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente
+2025-08-28 13:00:47,102 ERROR: Erro ao conectar: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente
+2025-08-28 13:00:49,578 INFO: Conectado ao servidor 10.52.64.39:9999
+2025-08-28 13:01:05,589 ERROR: Erro ao receber dados: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto

@@ -1,0 +1,116 @@
+2025-08-28 13:00:47,964 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:00:47,965 INFO: Servidor iniciado!
+2025-08-28 13:00:49,573 INFO: Cliente conectado: ('10.52.64.39', 60990)
+2025-08-28 13:00:49,573 INFO: Cliente conectado: 10.52.64.39:60990
+2025-08-28 13:02:56,340 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:02:56,341 INFO: Servidor iniciado!
+2025-08-28 13:02:57,342 INFO: Cliente conectado: ('10.52.64.39', 62133)
+2025-08-28 13:02:57,342 INFO: Cliente conectado: 10.52.64.39:62133
+2025-08-28 13:03:01,203 ERROR: Erro ao enviar para cliente ('10.52.64.39', 62133): [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+2025-08-28 13:03:01,203 INFO: Cliente desconectado: 10.52.64.39:62133
+2025-08-28 13:03:01,203 WARNING: Cliente desconectado: 10.52.64.39:62133
+2025-08-28 13:48:07,102 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:48:07,149 INFO: Servidor iniciado!
+2025-08-28 13:48:45,677 WARNING: Erro ao shutdown do socket do servidor: [WinError 10057] Uma solicitação de envio ou recebimento de dados não foi permitida porque o soquete não está conectado e (durante o envio em um soquete de datagrama usando-se uma chamada sendto) não foi fornecido um endereço
+2025-08-28 13:48:48,680 INFO: Servidor parado.
+2025-08-28 13:48:48,682 INFO: Loop de aceitação encerrado.
+2025-08-28 13:48:48,682 INFO: Loop de aceitação encerrado.
+2025-08-28 13:50:17,017 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:50:17,063 INFO: Servidor iniciado!
+2025-08-28 13:55:30,832 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:55:30,877 INFO: Servidor iniciado!
+2025-08-28 13:58:49,672 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:58:49,713 INFO: Servidor iniciado!
+2025-08-28 13:59:34,536 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 13:59:34,576 INFO: Servidor iniciado!
+2025-08-28 13:59:35,775 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:35,993 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:36,211 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:36,440 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:36,751 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:37,069 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:37,273 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:37,496 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:37,873 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:38,138 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:38,319 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:38,604 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:38,903 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:39,168 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:39,364 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:39,598 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:39,834 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:40,187 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:40,496 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:40,848 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:41,169 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:41,431 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:42,190 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:43,106 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:43,510 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:43,856 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:44,121 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:44,927 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:45,165 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:45,556 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:45,890 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:46,179 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:46,569 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:46,922 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:47,160 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:47,400 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:47,637 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:48,001 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:48,319 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:48,667 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:48,985 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:49,178 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:49,520 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:49,729 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:49,985 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:50,291 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:50,547 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:50,846 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:51,173 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:51,410 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:51,691 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:51,937 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:52,336 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:52,832 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:53,069 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:53,533 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:53,854 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:54,052 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:54,379 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:54,611 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 13:59:54,781 ERROR: Erro ao atualizar preview local: '_tkinter.tkapp' object has no attribute 'preview_label'
+2025-08-28 14:04:08,583 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:04:08,629 INFO: Servidor iniciado!
+2025-08-28 14:04:16,050 WARNING: Erro ao shutdown do socket do servidor: [WinError 10057] Uma solicitação de envio ou recebimento de dados não foi permitida porque o soquete não está conectado e (durante o envio em um soquete de datagrama usando-se uma chamada sendto) não foi fornecido um endereço
+2025-08-28 14:04:19,054 INFO: Servidor parado.
+2025-08-28 14:04:19,056 INFO: Loop de aceitação encerrado.
+2025-08-28 14:04:19,058 INFO: Loop de aceitação encerrado.
+2025-08-28 14:04:33,351 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:04:33,403 INFO: Servidor iniciado!
+2025-08-28 14:05:23,327 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:05:23,350 INFO: Servidor iniciado!
+2025-08-28 14:06:55,527 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:06:55,550 INFO: Servidor iniciado!
+2025-08-28 14:08:20,206 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:08:20,249 INFO: Servidor iniciado!
+2025-08-28 14:15:41,150 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:15:41,180 INFO: Servidor iniciado!
+2025-08-28 14:17:47,773 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:17:47,816 INFO: Servidor iniciado!
+2025-08-28 14:17:55,962 WARNING: Erro ao shutdown do socket do servidor: [WinError 10057] Uma solicitação de envio ou recebimento de dados não foi permitida porque o soquete não está conectado e (durante o envio em um soquete de datagrama usando-se uma chamada sendto) não foi fornecido um endereço
+2025-08-28 14:17:58,966 INFO: Servidor parado.
+2025-08-28 14:17:58,967 INFO: Loop de aceitação encerrado.
+2025-08-28 14:17:58,968 INFO: Loop de aceitação encerrado.
+2025-08-28 14:18:01,483 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:18:01,527 INFO: Servidor iniciado!
+2025-08-28 14:20:29,885 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-08-28 14:20:29,928 INFO: Servidor iniciado!
+2025-08-28 14:20:33,146 INFO: Cliente conectado: ('10.52.64.39', 62102)
+2025-08-28 14:20:33,147 INFO: Cliente conectado: 10.52.64.39:62102
+2025-09-05 11:06:30,031 INFO: Servidor iniciado em 10.52.64.39:9999
+2025-09-05 11:06:30,083 INFO: Servidor iniciado!
