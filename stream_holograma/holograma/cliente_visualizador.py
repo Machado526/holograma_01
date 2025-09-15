@@ -9,6 +9,8 @@ import numpy as np
 import customtkinter as ctk
 import tkinter.messagebox as messagebox
 from typing import Optional
+import pyaudio
+import pickle
 
 # Configurações de tema
 ctk.set_appearance_mode("Dark")
@@ -22,6 +24,11 @@ class ClienteApp:
         self.master.title("Cliente de Holograma")
         self.master.geometry("600x300")
         self.master.resizable(False, False)
+
+        self.audio_stream_out = None
+        self.pyaudio_instance = None
+        self.last_audio_time = 0
+        self.audio_buffer = []
 
         self.sock: Optional[socket.socket] = None
         self.running: bool = False
@@ -130,31 +137,51 @@ class ClienteApp:
             data += chunk
         return data
 
-    def recv_loop(self) -> None:
-        """Loop de recebimento de frames."""
-        try:
-            while self.running:
+    def recv_loop(self):
+        # Inicializar saída de áudio
+        self.pyaudio_instance = pyaudio.PyAudio()
+        self.audio_stream_out = self.pyaudio_instance.open(
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=44100,
+            output=True,
+            frames_per_buffer=1024
+        )
+
+        while self.running:
+            try:
+                # Receber cabeçalho com tamanho do payload
                 header = self.recv_all(4)
                 if header is None:
-                    if self.running:
-                        messagebox.showerror("Erro de Conexão", "Conexão perdida com o servidor!")
                     break
-                (length,) = struct.unpack("!I", header)
-                payload = self.recv_all(length)
-                if payload is None:
-                    if self.running:
-                        messagebox.showerror("Erro de Conexão", "Conexão perdida com o servidor!")
+
+                length = struct.unpack("!I", header)[0]
+
+                # Receber payload
+                payload_bytes = self.recv_all(length)
+                if payload_bytes is None:
                     break
-                frame = cv2.imdecode(np.frombuffer(payload, dtype=np.uint8), cv2.IMREAD_COLOR)
-                if frame is None:
-                    continue
-                frame = cv2.resize(frame, (1920, 1080))
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                img = Image.fromarray(frame)
-                imgtk = ImageTk.PhotoImage(image=img)
-                self.master.after(1, self.update_image, imgtk)
-        finally:
-            self.disconnect_server()
+
+                # Desserializar os dados
+                payload = pickle.loads(payload_bytes)
+
+                # Processar vídeo
+                frame = cv2.imdecode(np.frombuffer(payload['video'], dtype=np.uint8), cv2.IMREAD_COLOR)
+
+                # Reproduzir áudio se existir
+                if payload.get('audio'):
+                    self.audio_stream_out.write(payload['audio'])
+
+                # Atualizar vídeo
+                if frame is not None:
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    img = Image.fromarray(frame)
+                    imgtk = ImageTk.PhotoImage(image=img)
+                    self.master.after(1, self.update_image, imgtk)
+
+            except Exception as e:
+                print(f"Erro ao processar frame: {e}")
+                continue
 
     def update_image(self, imgtk: ImageTk.PhotoImage) -> None:
         """Atualiza o preview com a imagem recebida."""

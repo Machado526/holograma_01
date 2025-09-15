@@ -13,12 +13,9 @@ from utilitarios_holograma import composicao_holograma, aplicar_filtro
 import customtkinter as ctk
 from PIL import Image, ImageTk
 from typing import Callable, Optional, Tuple, List
-
+import pyaudio
+import pickle
 # Tenta usar CTkMessagebox (opcional). Se não existir, cai para log.
-try:
-    from CTkMessagebox import CTkMessagebox
-except Exception:
-    CTkMessagebox = None
 
 HOST = ""
 PORT = 9999
@@ -101,6 +98,14 @@ class ServidorApp(ctk.CTk):
         super().__init__()
         self.title("Servidor Holograma")
         self.geometry("900x950")
+
+        self.audio_enabled = False  # Adicionar controle de áudio
+        self.audio_format = pyaudio.paInt16
+        self.channels = 1
+        self.rate = 44100
+        self.chunk = 1024
+        self.audio_stream = None
+        self.pyaudio_instance = None
 
         # Controle
         self.running = threading.Event()
@@ -342,26 +347,17 @@ class ServidorApp(ctk.CTk):
         w, h = int(self.width_var.get()), int(self.height_var.get())
         fps_target = max(5, min(60, int(self.fps_var.get())))
 
-        cap = cv2.VideoCapture(cam_idx, cv2.CAP_DSHOW if hasattr(cv2, 'CAP_DSHOW') else 0)
+        cap = cv2.VideoCapture(cam_idx)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
         cap.set(cv2.CAP_PROP_FPS, fps_target)
 
-
-        if not cap.isOpened():
-            if CTkMessagebox:
-                try:
-                    CTkMessagebox(title="Erro", message="Não foi possível abrir a câmera.", icon="cancel")
-                except Exception:
-                    pass
-            self._log_threadsafe("Não foi possível abrir a câmera.")
-            self.stop_server()
-            return
-
+        # Inicializações para controle de FPS
         last = time.time()
         frame_count = 0
         fps_report_interval = 2.0  # Segundos
         fps_last_report_time = time.time()
+
         try:
             while self.running.is_set():
                 ret, frame = cap.read()
@@ -369,44 +365,47 @@ class ServidorApp(ctk.CTk):
                     time.sleep(0.01)
                     continue
 
+                # Processamento do frame
                 mode = self.mode_var.get()
-
                 if self.remove_bg_var.get():
-                    frame = self.remove_bg_mediapipe_fast(frame, bg_color=(0,0,0))
+                    frame = self.remove_bg_mediapipe_fast(frame, bg_color=(0, 0, 0))
 
                 filtro = self.filter_var.get()
                 frame = aplicar_filtro(frame, filtro)
                 frame = composicao_holograma(frame, mode=mode, flip_v=self.flip_v.get())
 
-                ok, buf = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
-                if ok:
-                    payload = buf.tobytes()
-                    self.client_pool.broadcast(payload)
-
+                # Prévia local
                 if self.preview_v.get():
                     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     img = Image.fromarray(frame_rgb)
                     imgtk = ImageTk.PhotoImage(image=img)
                     self.preview_label.configure(image=imgtk)
-                    self.preview_label.image = imgtk
+                    self.preview_label.image = imgtk  # Mantém referência
 
-                # Controle de FPS real
+                # Envio para clientes
+                ok, buf = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+                if ok:
+                    payload = buf.tobytes()
+                    self.client_pool.broadcast(payload)
+
+                # Controle de FPS
                 frame_count += 1
                 now = time.time()
                 elapsed = now - last
                 target_dt = 1.0 / fps_target
+
                 if elapsed < target_dt:
                     time.sleep(target_dt - elapsed)
+
                 last = time.time()
+
                 if (now - fps_last_report_time) > fps_report_interval:
                     self.last_fps = int(frame_count / (now - fps_last_report_time))
                     frame_count = 0
                     fps_last_report_time = now
+
         finally:
-            try:
-                cap.release()
-            except Exception:
-                pass
+            cap.release()
 
 if __name__ == "__main__":
     app = ServidorApp()
