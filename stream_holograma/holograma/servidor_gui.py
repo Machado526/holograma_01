@@ -248,6 +248,16 @@ class ServidorApp(ctk.CTk):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
+        # Dentro de start_server(), após iniciar o socket
+        self.pyaudio_instance = pyaudio.PyAudio()
+        self.audio_stream = self.pyaudio_instance.open(
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=44100,
+            input=True,
+            frames_per_buffer=1024
+        )
+
         try:
             self.server_socket.bind((HOST, port))
             self.server_socket.listen(5)
@@ -352,60 +362,69 @@ class ServidorApp(ctk.CTk):
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
         cap.set(cv2.CAP_PROP_FPS, fps_target)
 
-        # Inicializações para controle de FPS
+        # Controle de FPS
         last = time.time()
         frame_count = 0
-        fps_report_interval = 2.0  # Segundos
+        fps_report_interval = 2.0
         fps_last_report_time = time.time()
 
-        try:
-            while self.running.is_set():
-                ret, frame = cap.read()
-                if not ret:
-                    time.sleep(0.01)
-                    continue
+        # Garante que o preview_label tenha o buffer de imagens
+        if not hasattr(self.preview_label, "imgtk_refs"):
+            self.preview_label.imgtk_refs = []
 
-                # Processamento do frame
-                mode = self.mode_var.get()
-                if self.remove_bg_var.get():
-                    frame = self.remove_bg_mediapipe_fast(frame, bg_color=(0, 0, 0))
+        while self.running:
+            # ▶ 1. Captura o quadro da câmera
+            ret, frame = cap.read()
+            if not ret:
+                print("Falha ao capturar frame.")
+                continue
 
-                filtro = self.filter_var.get()
-                frame = aplicar_filtro(frame, filtro)
-                frame = composicao_holograma(frame, mode=mode, flip_v=self.flip_v.get())
+            # ▶ 2. Atualiza a prévia do servidor de forma segura
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img = Image.fromarray(frame_rgb)
+            imgtk = ImageTk.PhotoImage(image=img)
 
-                # Prévia local
-                if self.preview_v.get():
-                    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    img = Image.fromarray(frame_rgb)
-                    imgtk = ImageTk.PhotoImage(image=img)
-                    self.preview_label.configure(image=imgtk)
-                    self.preview_label.image = imgtk  # Mantém referência
+            # Usa after para atualizar a UI de forma thread-safe
+            def update_preview(imgtk_copy):
+                self.preview_label.imgtk_refs.append(imgtk_copy)
+                if len(self.preview_label.imgtk_refs) > 2:
+                    self.preview_label.imgtk_refs.pop(0)
+                self.preview_label.configure(image=imgtk_copy)
 
-                # Envio para clientes
-                ok, buf = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
-                if ok:
-                    payload = buf.tobytes()
+            self.preview_label.after(0, update_preview, imgtk)
+
+            # ▶ 3. Captura de áudio
+            try:
+                audio_data = self.audio_stream.read(4096, exception_on_overflow=False)
+            except Exception as e:
+                print(f"Erro ao capturar áudio: {e}")
+                audio_data = b""
+
+            # ▶ 4. Codificação e envio do frame + áudio
+            ok, buf = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+            if ok:
+                data = {'video': buf.tobytes(), 'audio': audio_data}
+                try:
+                    payload = pickle.dumps(data, protocol=pickle.HIGHEST_PROTOCOL)
                     self.client_pool.broadcast(payload)
+                except Exception as e:
+                    print(f"Erro ao enviar dados: {e}")
 
-                # Controle de FPS
-                frame_count += 1
-                now = time.time()
-                elapsed = now - last
-                target_dt = 1.0 / fps_target
+            # ▶ 5. Controle de FPS
+            frame_count += 1
+            now = time.time()
+            if now - last < 1.0 / fps_target:
+                time.sleep(max(0, (1.0 / fps_target) - (now - last)))
+            last = now
 
-                if elapsed < target_dt:
-                    time.sleep(target_dt - elapsed)
+            # ▶ 6. Relatório de FPS a cada 2 segundos
+            if now - fps_last_report_time >= fps_report_interval:
+                print(f"FPS: {frame_count / (now - fps_last_report_time):.1f}")
+                fps_last_report_time = now
+                frame_count = 0
 
-                last = time.time()
+        cap.release()
 
-                if (now - fps_last_report_time) > fps_report_interval:
-                    self.last_fps = int(frame_count / (now - fps_last_report_time))
-                    frame_count = 0
-                    fps_last_report_time = now
-
-        finally:
-            cap.release()
 
 if __name__ == "__main__":
     app = ServidorApp()
