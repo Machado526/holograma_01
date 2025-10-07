@@ -11,16 +11,15 @@ from typing import Optional
 import pyaudio
 import pickle
 
-# Tema
+
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
 
 class ClienteApp:
-    """Cliente que recebe payloads pickled {'video': jpg_bytes, 'audio': raw_audio_bytes'}"""
 
     def __init__(self, master: ctk.CTk):
         self.master = master
-        self.master.title("Cliente de Holograma (Áudio+Vídeo)")
+        self.master.title("Cliente de Holograma")
         self.master.geometry("600x300")
         self.master.resizable(False, False)
 
@@ -83,7 +82,7 @@ class ClienteApp:
         self.preview_window.protocol("WM_DELETE_WINDOW", self.disconnect_server)
         self.preview_label.imgtk_refs = []
 
-        # Áudio: inicializa pyaudio e stream de saída
+        # Áudio
         try:
             self.pyaudio_instance = pyaudio.PyAudio()
             self.audio_stream_out = self.pyaudio_instance.open(
@@ -98,7 +97,6 @@ class ClienteApp:
             messagebox.showwarning("Áudio", f"Não foi possível inicializar áudio: {e}")
             self.audio_stream_out = None
 
-        # Start recv thread
         self.thread = threading.Thread(target=self.recv_loop, daemon=True)
         self.thread.start()
 
@@ -125,7 +123,6 @@ class ClienteApp:
             self.preview_window.destroy()
             self.preview_window = None
 
-        # fechar audio
         try:
             if self.audio_stream_out:
                 self.audio_stream_out.stop_stream()
@@ -159,13 +156,11 @@ class ClienteApp:
                     break
                 length = struct.unpack("!I", header)[0]
                 if length == 0:
-                    # protocolo: comprimento zero -> ignorar
                     continue
                 payload_bytes = self.recv_all(length)
                 if payload_bytes is None:
                     break
 
-                # Desserializar
                 try:
                     payload = pickle.loads(payload_bytes)
                 except Exception as e:
@@ -195,7 +190,6 @@ class ClienteApp:
                     except Exception:
                         pass
 
-                # Atualiza preview
                 if frame is not None:
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     img = Image.fromarray(frame)
@@ -206,7 +200,6 @@ class ClienteApp:
                 print(f"Erro no loop de recebimento: {e}")
                 break
 
-        # quando sai do loop, garante desconexão limpa
         self.disconnect_server()
 
     def update_image(self, imgtk: ImageTk.PhotoImage) -> None:
