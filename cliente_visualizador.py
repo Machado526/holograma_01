@@ -15,7 +15,7 @@ import pickle
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
 
-class ClienteApp:
+class clienteAplicacao:
 
     def __init__(self, master: ctk.CTk):
         self.master = master
@@ -42,9 +42,9 @@ class ClienteApp:
         self.port_var = ctk.IntVar(value=9999)
         ctk.CTkEntry(frm, textvariable=self.port_var, width=80, corner_radius=8).grid(row=1, column=1, sticky="w", pady=6)
 
-        self.btn_connect = ctk.CTkButton(frm, text="Conectar", command=self.connect_server, corner_radius=10, fg_color="#4caf50")
+        self.btn_connect = ctk.CTkButton(frm, text="Conectar", command=self.conectar_servidor, corner_radius=10, fg_color="#4caf50")
         self.btn_connect.grid(row=2, column=0, padx=6, pady=10, sticky="ew")
-        self.btn_disconnect = ctk.CTkButton(frm, text="Desconectar", command=self.disconnect_server, state="disabled", corner_radius=10, fg_color="#f44336")
+        self.btn_disconnect = ctk.CTkButton(frm, text="Desconectar", command=self.desconectar_servidor, state="disabled", corner_radius=10, fg_color="#f44336")
         self.btn_disconnect.grid(row=2, column=1, padx=6, pady=10, sticky="ew")
 
         ctk.CTkLabel(frm, text="Status:", font=("Arial", 12, "bold")).grid(row=3, column=0, sticky="e", pady=4)
@@ -54,9 +54,7 @@ class ClienteApp:
         frm.grid_columnconfigure(0, weight=1)
         frm.grid_columnconfigure(1, weight=1)
 
-        self.master.protocol("WM_DELETE_WINDOW", self.on_close)
-
-    def connect_server(self) -> None:
+    def conectar_servidor(self) -> None:
         ip = self.ip_var.get()
         port = int(self.port_var.get())
 
@@ -79,28 +77,21 @@ class ClienteApp:
         self.preview_window.geometry("960x540")
         self.preview_label = ctk.CTkLabel(self.preview_window, text="")
         self.preview_label.pack(expand=True, fill="both")
-        self.preview_window.protocol("WM_DELETE_WINDOW", self.disconnect_server)
+        self.preview_window.protocol("WM_DELETE_WINDOW", self.desconectar_servidor)
         self.preview_label.imgtk_refs = []
 
         # Áudio
         try:
             self.pyaudio_instance = pyaudio.PyAudio()
-            self.audio_stream_out = self.pyaudio_instance.open(
-                format=pyaudio.paInt16,
-                channels=1,
-                rate=44100,
-                output=True,
-                frames_per_buffer=1024
-            )
-            print("Áudio inicializado: 44100Hz, 1 canal")
+            self.audio_stream_out = self.pyaudio_instance.open(format=pyaudio.paInt16,channels=1,rate=44100,output=True,frames_per_buffer=1024)
+            print("Áudio inicializado: 44100Hz")
         except Exception as e:
             messagebox.showwarning("Áudio", f"Não foi possível inicializar áudio: {e}")
             self.audio_stream_out = None
-
         self.thread = threading.Thread(target=self.recv_loop, daemon=True)
         self.thread.start()
 
-    def disconnect_server(self) -> None:
+    def desconectar_servidor(self) -> None:
         self.running = False
         if self.sock:
             try:
@@ -160,13 +151,11 @@ class ClienteApp:
                 payload_bytes = self.recv_all(length)
                 if payload_bytes is None:
                     break
-
                 try:
                     payload = pickle.loads(payload_bytes)
                 except Exception as e:
                     print(f"Erro ao desserializar payload: {e}")
                     continue
-
                 # Vídeo
                 video_bytes = payload.get('video')
                 if video_bytes:
@@ -174,45 +163,40 @@ class ClienteApp:
                     frame = cv2.imdecode(arr, cv2.IMREAD_COLOR)
                 else:
                     frame = None
-
                 # Áudio
                 audio_bytes = payload.get('audio')
                 if audio_bytes and self.audio_stream_out:
                     try:
-                        # escreve o buffer inteiro (PyAudio aceita buffers maiores)
                         self.audio_stream_out.write(audio_bytes)
                     except Exception as e:
                         print(f"Erro ao reproduzir áudio: {e}")
                 elif self.audio_stream_out:
-                    # se não veio áudio, escreve silêncio curto para manter o stream
                     try:
                         self.audio_stream_out.write(b"\x00" * 2048)
                     except Exception:
                         pass
-
                 if frame is not None:
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     img = Image.fromarray(frame)
                     imgtk = ImageTk.PhotoImage(image=img)
-                    self.master.after(1, self.update_image, imgtk)
-
+                    self.master.after(1, self.atualiza_Imagens, imgtk)
             except Exception as e:
                 print(f"Erro no loop de recebimento: {e}")
                 break
 
-        self.disconnect_server()
+        self.desconectar_servidor()
 
-    def update_image(self, imgtk: ImageTk.PhotoImage) -> None:
+    def atualiza_Imagens(self, imgtk: ImageTk.PhotoImage) -> None:
         self.preview_label.imgtk_refs.append(imgtk)
         if len(self.preview_label.imgtk_refs) > 2:
             self.preview_label.imgtk_refs.pop(0)
         self.preview_label.configure(image=imgtk)
 
-    def on_close(self) -> None:
-        self.disconnect_server()
+    def finalizador(self) -> None:
+        self.desconectar_servidor()
         self.master.after(200, self.master.destroy)
 
 if __name__ == "__main__":
     root = ctk.CTk()
-    app = ClienteApp(root)
+    app = clienteAplicacao(root)
     root.mainloop()

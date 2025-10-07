@@ -18,8 +18,7 @@ HOST = ""
 PORT = 9999
 
 class ClientPool:
-    def __init__(self, log_callback: Optional[Callable[[str], None]] = None,
-                 status_callback: Optional[Callable[[str], None]] = None):
+    def __init__(self, log_callback: Optional[Callable[[str], None]] = None, status_callback: Optional[Callable[[str], None]] = None):
         self.clients: List[Tuple[socket.socket, Tuple[str, int]]] = []
         self.lock = threading.Lock()
         self.log_cb = log_callback
@@ -144,12 +143,7 @@ class ServidorApp(ctk.CTk):
 
         self.filter_var = ctk.StringVar(value="Nenhum")
         ctk.CTkLabel(holo_frame, text="Filtro:", font=("Arial", 12)).grid(row=1, column=0, padx=5, pady=5, sticky="e")
-        ctk.CTkComboBox(
-            holo_frame,
-            values=["Nenhum", "Sépia", "Vermelho", "Blue BGR", "Canny"],
-            variable=self.filter_var,
-            width=120
-        ).grid(row=1, column=1, sticky="w")
+        ctk.CTkComboBox(holo_frame, values=["Nenhum", "Sépia", "Vermelho", "Azul", "Canny"], variable=self.filter_var, width=120).grid(row=1, column=1, sticky="w")
 
         # Botões
         ctrl_frame = ctk.CTkFrame(self.main_frame, corner_radius=12)
@@ -204,11 +198,7 @@ class ServidorApp(ctk.CTk):
         self.btn_start.configure(state="disabled")
         self.btn_stop.configure(state="normal")
         self.status_var.set(f"Transmitindo em {get_local_ip()}:{port}")
-
-        self.client_pool = ClientPool(
-            log_callback=self._log_threadsafe,
-            status_callback=self._set_status_threadsafe
-        )
+        self.client_pool = ClientPool( log_callback=self._log_threadsafe, status_callback=self._set_status_threadsafe)
 
         if self.audio_enabled:
             self.pyaudio_instance = pyaudio.PyAudio()
@@ -324,21 +314,13 @@ class ServidorApp(ctk.CTk):
 
     def _audio_capture_loop(self) -> None:
         try:
-            stream = self.pyaudio_instance.open(format=self.audio_format,
-                                                channels=self.channels,
-                                                rate=self.rate,
-                                                input=True,
-                                                frames_per_buffer=self.chunk)
+            stream = self.pyaudio_instance.open(format=self.audio_format, channels=self.channels, rate=self.rate, input=True, frames_per_buffer=self.chunk)
             self.log(f"Captura de áudio iniciada em {self.rate}Hz, {self.channels} canais")
         except Exception as e:
             self.log(f"Falha ao abrir microfone: {e}")
             try:
                 self.rate, self.channels = 48000, 2
-                stream = self.pyaudio_instance.open(format=self.audio_format,
-                                                    channels=self.channels,
-                                                    rate=self.rate,
-                                                    input=True,
-                                                    frames_per_buffer=self.chunk)
+                stream = self.pyaudio_instance.open(format=self.audio_format, channels=self.channels, rate=self.rate, input=True, frames_per_buffer=self.chunk)
                 self.log(f"Captura de áudio fallback em {self.rate}Hz, {self.channels} canais")
             except Exception as e2:
                 self.log(f"Falha no fallback de áudio: {e2}")
